@@ -26,6 +26,11 @@ class RepositoryTests(TestCase):
         self.repository.add(self.domain_bookmark_1)
         self.assertEqual(Bookmark.objects.count(), 1)
 
+    def test_repository_delete(self):
+        self.repository.add(self.domain_bookmark_1)
+        self.repository.delete(self.domain_bookmark_1.id)
+        self.assertEqual(Bookmark.objects.count(), 0)
+
 
 class UoWTests(TestCase):
     def setUp(self):

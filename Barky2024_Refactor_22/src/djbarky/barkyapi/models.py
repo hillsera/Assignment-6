@@ -53,6 +53,14 @@ class Bookmark(models.Model):
             date_added=self.date_added,
         )
         return b
+    
+    def delete_by_id(bookmark_id):
+        try:
+            bookmark = Bookmark.objects.get(id=bookmark_id)
+            bookmark.delete()
+            return True
+        except Bookmark.DoesNotExist:
+            return False
 
 
 class Snippet(models.Model):
