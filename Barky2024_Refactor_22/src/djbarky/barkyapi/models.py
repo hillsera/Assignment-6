@@ -5,7 +5,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
 
-from barky.domain import model as domain_model
+from barkyarch.domain.model import DomainBookmark
 
 # pygments stuff
 LEXERS = [item for item in get_all_lexers() if item[1]]
@@ -23,19 +23,19 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.title}"
-    
-    # class Meta:
-    #     app_label = 'barkyapi'
-    
+
+    class Meta:
+        app_label = "barkyapi"
+
     # these methods are borrowed from P&G
     # it is not clear if they are needed as we are simply translating to and from pure Python
     # objects to Django models and back.
     @staticmethod
-    def update_from_domain(domain_bookmark: domain_model.Bookmark):
+    def update_from_domain(domain_bookmark: DomainBookmark):
         try:
-            bookmark = Bookmark.objects.get(reference=domain_bookmark.id)
+            bookmark = Bookmark.objects.get(id=domain_bookmark.id)
         except Bookmark.DoesNotExist:
-            bookmark = Bookmark(reference=domain_bookmark.id)
+            bookmark = Bookmark(id=domain_bookmark.id)
 
         bookmark.id = domain_bookmark.id
         bookmark.title = domain_bookmark.title
@@ -44,8 +44,8 @@ class Bookmark(models.Model):
         bookmark.date_added = domain_bookmark.date_added
         bookmark.save()
 
-    def to_domain(self) -> domain_model.Bookmark:
-        b = domain_model.Bookmark(
+    def to_domain(self) -> DomainBookmark:
+        b = DomainBookmark(
             id=self.id,
             title=self.title,
             url=self.url,

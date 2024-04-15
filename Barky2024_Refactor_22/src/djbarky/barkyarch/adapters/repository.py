@@ -1,8 +1,7 @@
-# pylint: disable=no-member, no-self-use
 from typing import Set
 import abc
-from barky.domain import model
-from djbarky.barkyapi import models as django_models
+from barkyarch.domain.model import DomainBookmark
+from barkyapi.models import Bookmark
 
 
 class AbstractRepository(abc.ABC):
@@ -12,12 +11,12 @@ class AbstractRepository(abc.ABC):
     """
 
     def __init__(self):
-        self.bookmarks_set = set()  # type: Set[model.Bookmark]
+        self.bookmarks_set = set()  # type: Set[DomainBookmark]
 
-    def add(self, bookmark: model.Bookmark):
+    def add(self, bookmark: DomainBookmark):
         self.bookmarks_set.add(bookmark)
 
-    def get(self, id) -> model.Bookmark:
+    def get(self, id) -> DomainBookmark:
         bookmark = self._get(id)
         if bookmark:
             self.bookmarks_set.add(bookmark)
@@ -38,15 +37,13 @@ class DjangoRepository(AbstractRepository):
         self.update(bookmark)
 
     def update(self, bookmark):
-        django_models.Bookmark.update_from_domain(bookmark)
+        Bookmark.update_from_domain(bookmark)
 
     def _get(self, id):
-        return django_models.Bookmark.objects.filter(id=id).first().to_domain()
+        return Bookmark.objects.filter(id=id).first().to_domain()
 
     def list(self):
-        return [
-            bookmark.to_domain() for bookmark in django_models.Bookmark.objects.all()
-        ]
+        return [bookmark.to_domain() for bookmark in Bookmark.objects.all()]
 
 
 class DjangoApiRepository(AbstractRepository):

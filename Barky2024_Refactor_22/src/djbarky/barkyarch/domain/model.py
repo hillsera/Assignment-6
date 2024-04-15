@@ -2,7 +2,7 @@ from datetime import date
 from typing import List, Optional, Set
 
 
-class Bookmark:
+class DomainBookmark:
     """
     Bookmark domain model. Note, this is much simpler than P&G's domain model.
     """
@@ -14,5 +14,5 @@ class Bookmark:
         self.notes = notes
         self.date_added = date_added
 
-        def __str__(self):
-            return f"{self.title}"
+    def __str__(self):
+        return f"{self.title}"

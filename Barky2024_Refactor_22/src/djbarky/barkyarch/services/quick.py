@@ -6,9 +6,7 @@ loc = Path(__file__).parent.parent.parent / "djbarky"
 
 print(f"loc: {loc}")
 
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), f"{loc}")
-)
+sys.path.append(os.path.join(os.path.dirname(__file__), f"{loc}"))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djbarky.settings")
 
@@ -38,17 +36,16 @@ if apps.ready:
         title="Test Title",
         url="http://test.com",
         notes="Test notes",
-        date_added="2021-01-01",        
+        date_added="2021-01-01",
     )
     bm.objects.create(
         id=2,
         title="Test Title 2",
         url="http://test2 .com",
         notes="Test notes 2",
-        date_added="2021-01-02",        
+        date_added="2021-01-02",
     )
     print("Bookmarks: ", bm.objects.all())
 
     # get rid of tests
     bm.objects.all().delete()
-
