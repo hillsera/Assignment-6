@@ -54,6 +54,7 @@ class Bookmark(models.Model):
         )
         return b
     
+    # delete bookmark
     def delete_by_id(bookmark_id):
         try:
             bookmark = Bookmark.objects.get(id=bookmark_id)
@@ -61,6 +62,18 @@ class Bookmark(models.Model):
             return True
         except Bookmark.DoesNotExist:
             return False
+
+    # edit bookmark    
+    def edit_by_id(bookmark_id, new_data):
+        try:
+            bookmark = Bookmark.objects.get(id=bookmark_id)
+            for field, value in new_data.items():
+                setattr(bookmark, field, value)
+            bookmark.save()
+            return True
+        except Bookmark.DoesNotExist:
+            return False
+
 
 
 class Snippet(models.Model):

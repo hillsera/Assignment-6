@@ -26,8 +26,14 @@ class AbstractRepository(abc.ABC):
     def _get(self, id):
         raise NotImplementedError
     
+    # delete
     @abc.abstractmethod
     def delete(self, bookmark_id):
+        raise NotImplementedError
+    
+    # edit bookmark
+    @abc.abstractmethod
+    def edit(self, bookmark_id, new_data):
         raise NotImplementedError
 
 
@@ -49,6 +55,7 @@ class DjangoRepository(AbstractRepository):
     def list(self):
         return [bookmark.to_domain() for bookmark in Bookmark.objects.all()]
     
+    # delete
     def delete(self, bookmark_id):
         try:
             bookmark = Bookmark.objects.get(id=bookmark_id)
@@ -56,6 +63,16 @@ class DjangoRepository(AbstractRepository):
         except Bookmark.DoesNotExist:
             pass
 
+    
+    # edit bookmark
+    def edit(self, bookmark_id, new_data):
+        try:
+            bookmark = Bookmark.objects.get(id=bookmark_id)
+            for field, value in new_data.items():
+                setattr(bookmark, field, value)
+            bookmark.save()
+        except Bookmark.DoesNotExist:
+            pass
 
 class DjangoApiRepository(AbstractRepository):
     """

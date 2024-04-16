@@ -26,11 +26,25 @@ class RepositoryTests(TestCase):
         self.repository.add(self.domain_bookmark_1)
         self.assertEqual(Bookmark.objects.count(), 1)
 
+    # added delete test
     def test_repository_delete(self):
         self.repository.add(self.domain_bookmark_1)
         self.repository.delete(self.domain_bookmark_1.id)
         self.assertEqual(Bookmark.objects.count(), 0)
 
+    # testing edit bookmark
+    def test_repository_edit(self):
+        self.repository.add(self.domain_bookmark_1)
+        updated_data = {
+            'title': 'New Title Here',
+            'url': 'https://url.com',
+            'notes': 'Edited this bookmark.'
+        }
+        self.repository.edit(self.domain_bookmark_1.id, updated_data)
+        edited_bookmark = Bookmark.objects.get(id=self.domain_bookmark_1.id)
+        self.assertEqual(edited_bookmark.title, updated_data['title'])
+        self.assertEqual(edited_bookmark.url, updated_data['url'])
+        self.assertEqual(edited_bookmark.notes, updated_data['notes'])
 
 class UoWTests(TestCase):
     def setUp(self):
